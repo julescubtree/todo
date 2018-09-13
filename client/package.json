@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "react-app-rewired build && cp -r build/* ../server/public",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
   }
