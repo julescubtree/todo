@@ -14,7 +14,7 @@ router.get("/", function(req, res, next) {
     res.redirect(`/${newList.id}`);
   })
   .catch(() => {
-    res.send("ERROR: firestore document set failed");
+    next(new Error("firestore document set failed"));
   });
 });
 
@@ -26,11 +26,11 @@ router.get("/:listID", function(req, res, next) {
       if(todoList!==undefined){
         res.json(todoList);
       }else{
-        res.send("SORRY--no to-do list");
+        next(new Error("to-do list does not exist"));
       }
     })
     .catch(() => {
-      res.send("ERROR: firestore document get failed");
+      next(new Error("firestore document get failed"));
     });
 });
 
