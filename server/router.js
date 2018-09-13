@@ -2,16 +2,29 @@ const express = require("express");
 const router = express.Router();
 
 
-const { firestore } = require("./firebase");
+const { firestore, FieldValue } = require("./firebase");
 
 router.get("/", function(req, res, next) {
   const newList = firestore.collection("lists").doc()
+  const newListID = newList.id;
+  let newListBatch = firestore.batch();
 
-  newList.set({
-    title: "To-do list:",
-    todos: [],
-  }).then(() => {
-    res.redirect(`/${newList.id}`);
+  newListBatch.set(newList, { title: "To-do list" });
+  for(let i=0; i<3; i++){
+    let newListItem = firestore.collection(`lists/${newListID}/todos`).doc();
+    newListBatch.set(
+      newListItem, 
+      { 
+        title: "To-do item", 
+        desc: "To-do description",
+        time: FieldValue.serverTimestamp(),
+      }
+    );
+  }
+  
+  newListBatch.commit()
+  .then(() => {
+    res.redirect(`/${newListID}`);
   })
   .catch(() => {
     next(new Error("firestore document set failed"));

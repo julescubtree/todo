@@ -14,4 +14,5 @@ fbFirestore.settings( { timestampsInSnapshots: true, } );
 
 module.exports = {
   firestore: fbFirestore,
+  FieldValue: fbAdmin.firestore.FieldValue,
 };
