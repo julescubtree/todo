@@ -9,6 +9,7 @@ const fbApp = fbAdmin.initializeApp({
 });
 
 fbFirestore = fbApp.firestore();
+fbFirestore.settings( { timestampsInSnapshots: true, } );
 
 
 module.exports = {
