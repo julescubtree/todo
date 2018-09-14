@@ -1,21 +1,61 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { firestoreConnect, isLoaded } from "react-redux-firebase";
+import { Spin } from "antd";
 
-class App extends Component {
+
+class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        { 
+          isLoaded(this.props.listInfo) && isLoaded(this.props.todos)
+          ? <div>
+              <h1>{this.props.listInfo.title}</h1>
+              <ol>
+                {this.props.todos.map( (todo) => <li>{todo.title}</li> )}
+              </ol>
+            </div>
+          : <Spin size="large" />
+        }
       </div>
     );
   }
 }
 
-export default App;
+
+export default compose(
+  firestoreConnect( (props) => {
+    const matchedListID = props.match.params.listID;
+    const listID = matchedListID!==undefined
+      ? matchedListID
+      : "test"; //DEBUG
+
+    return [
+      { 
+        collection: "lists", 
+        doc: listID,
+        storeAs: "listInfo",
+      },
+      {
+        //oh why doesn't this work. Oh well
+        //path: "lists/yM900y6ccnXP0uik6zgO/todos", 
+        collection: "lists", 
+        doc: listID,
+        subcollections: [
+          {collection: "todos"}
+        ],
+        orderBy: "title",  // change this later
+        storeAs: "todos",
+      }
+    ];
+  }),
+  connect(
+    (state) => ({
+      //todos: state.firebase.data["lists/yM900y6ccnXP0uik6zgO/todos"],
+      listInfo: state.firestore.data.listInfo,
+      todos: state.firestore.ordered.todos,
+    })
+  )
+)(App);
