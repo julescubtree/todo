@@ -19,7 +19,8 @@ firebase.initializeApp({
   storageBucket: "todo-41643.appspot.com",
   messagingSenderId: "698767599698"
 });
-firebase.firestore();
+const fbFirestore = firebase.firestore();
+fbFirestore.settings({timestampsInSnapshots: true});
 
 const createStoreWithFirebase = compose(
   reactReduxFirebase(firebase, {}),

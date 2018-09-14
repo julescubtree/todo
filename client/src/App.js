@@ -14,7 +14,7 @@ class App extends React.Component {
           ? <div>
               <h1>{this.props.listInfo.title}</h1>
               <ol>
-                {this.props.todos.map( (todo) => <li>{todo.title}</li> )}
+                {this.props.orderedTodos.map( (todo) => <li>{todo.title}</li> )}
               </ol>
             </div>
           : <Spin size="large" />
@@ -51,11 +51,18 @@ export default compose(
       }
     ];
   }),
-  connect(
-    (state) => ({
+  connect( (state) => {
+    //DEBUG temporary fix 
+    const unorderedTodos = state.firestore.ordered.todos;
+    const orderedTodos = unorderedTodos!==undefined
+      ? [...unorderedTodos].sort( (a,b) => (a.time.toMillis()-b.time.toMillis()) )
+      : [];
+
+    return {
       //todos: state.firebase.data["lists/yM900y6ccnXP0uik6zgO/todos"],
       listInfo: state.firestore.data.listInfo,
-      todos: state.firestore.ordered.todos,
-    })
-  )
+      todos: state.firestore.ordered.todos, //DEBUG: still currently necessary while debugging for isLoaded
+      orderedTodos,
+    };
+  })
 )(App);
