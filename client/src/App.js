@@ -2,21 +2,33 @@ import React from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
-import { Spin } from "antd";
+import { Card, Checkbox, Icon, Layout, Menu, Spin } from "antd";
+const { Content, Header, Sider } = Layout;
 
 
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        { 
+      <div>
+        {
           isLoaded(this.props.listInfo) && isLoaded(this.props.todos)
-          ? <div>
-              <h1>{this.props.listInfo.title}</h1>
-              <ol>
-                {this.props.orderedTodos.map( (todo) => <li>{todo.title}</li> )}
-              </ol>
-            </div>
+          ? <Layout>
+              <Header style={{ background: "#FFF" }}><h1>{this.props.listInfo.title}</h1></Header>
+              <Layout>
+                <Sider theme="light">
+                  <Menu>
+                    {this.props.orderedTodos.map(todo => <Menu.Item key={todo.id}>{todo.title}<Checkbox /></Menu.Item>)}
+                  </Menu>
+                </Sider>
+                <Content>
+                  <Card>
+                    <Icon type="picture" theme="twoTone" style={{ fontSize: "196px" }}/>
+                    <br />
+                    {this.props.todos[0].desc}
+                  </Card> 
+                </Content>
+              </Layout>
+            </Layout>
           : <Spin size="large" />
         }
       </div>
