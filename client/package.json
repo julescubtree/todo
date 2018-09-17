@@ -5,10 +5,11 @@
   "dependencies": {
     "ajv": "^6.5.3",
     "antd": "^3.9.2",
-    "babel-plugin-import": "^1.8.0",
+    "babel-plugin-import": "^1.9.1",
     "connected-react-router": "^4.4.1",
     "firebase": "^5.5.0",
     "history": "^4.7.2",
+    "prop-types": "^15.6.2",
     "react": "^16.5.1",
     "react-app-rewired": "^1.6.2",
     "react-dom": "^16.5.1",

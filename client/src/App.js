@@ -3,10 +3,37 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
 import { Card, Checkbox, Icon, Layout, Menu, Spin } from "antd";
+
 const { Content, Header, Sider } = Layout;
 
 
+
+
 class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.renderTodoMenuItem = this.renderTodoMenuItem.bind(this);
+    this.toggleTodoMenuItem = this.toggleTodoMenuItem.bind(this);
+  }
+
+  renderTodoMenuItem(todo){
+    return (
+      <Menu.Item key={todo.id}>
+        {todo.title}
+        <Checkbox 
+          checked={todo.completed} 
+          onChange={ (e) => {this.toggleTodoMenuItem(todo.id, e.target.checked)} }
+        />
+      </Menu.Item>
+    );
+  }
+
+  toggleTodoMenuItem(todoID, completed){
+    const { listID } = this.props.match.params;
+    const todo = this.props.firestore.doc(`lists/${listID}/todos/${todoID}`);
+    todo.update( { completed } );
+  }
+
   render() {
     return (
       <div>
@@ -17,7 +44,7 @@ class App extends React.Component {
               <Layout>
                 <Sider theme="light">
                   <Menu>
-                    {this.props.orderedTodos.map(todo => <Menu.Item key={todo.id}>{todo.title}<Checkbox /></Menu.Item>)}
+                    {this.props.orderedTodos.map(this.renderTodoMenuItem)}
                   </Menu>
                 </Sider>
                 <Content>
@@ -58,7 +85,7 @@ export default compose(
         subcollections: [
           {collection: "todos"}
         ],
-        orderBy: "title",  // change this later
+        orderBy: "index",  // change this later
         storeAs: "todos",
       }
     ];
@@ -67,7 +94,7 @@ export default compose(
     //DEBUG temporary fix 
     const unorderedTodos = state.firestore.ordered.todos;
     const orderedTodos = unorderedTodos!==undefined
-      ? [...unorderedTodos].sort( (a,b) => (a.time.toMillis()-b.time.toMillis()) )
+      ? [...unorderedTodos].sort( (a,b) => (a.index-b.index) )
       : [];
 
     return {
