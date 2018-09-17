@@ -2,37 +2,24 @@ import React from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
-import { Card, Checkbox, Icon, Layout, Menu, Spin } from "antd";
+import { Card, Icon, Layout, Spin } from "antd";
+
+import TodoMenu from "./TodoMenu";
 
 const { Content, Header, Sider } = Layout;
-
-
 
 
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.renderTodoMenuItem = this.renderTodoMenuItem.bind(this);
-    this.toggleTodoMenuItem = this.toggleTodoMenuItem.bind(this);
+    this.updateTodoCompletion = this.updateTodoCompletion.bind(this);
   }
 
-  renderTodoMenuItem(todo){
-    return (
-      <Menu.Item key={todo.id}>
-        {todo.title}
-        <Checkbox 
-          checked={todo.completed} 
-          onChange={ (e) => {this.toggleTodoMenuItem(todo.id, e.target.checked)} }
-        />
-      </Menu.Item>
-    );
-  }
-
-  toggleTodoMenuItem(todoID, completed){
+  updateTodoCompletion(todoID, completed){
     const { listID } = this.props.match.params;
     const todo = this.props.firestore.doc(`lists/${listID}/todos/${todoID}`);
     todo.update( { completed } );
-  }
+  }  
 
   render() {
     return (
@@ -43,9 +30,10 @@ class App extends React.Component {
               <Header style={{ background: "#FFF" }}><h1>{this.props.listInfo.title}</h1></Header>
               <Layout>
                 <Sider theme="light">
-                  <Menu>
-                    {this.props.orderedTodos.map(this.renderTodoMenuItem)}
-                  </Menu>
+                  <TodoMenu
+                    orderedTodos={this.props.orderedTodos}
+                    updateTodoCompletion={this.updateTodoCompletion}
+                  />
                 </Sider>
                 <Content>
                   <Card>
