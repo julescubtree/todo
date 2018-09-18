@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+//import App from './App';
 //import registerServiceWorker from './registerServiceWorker';
 
 import { ConnectedRouter } from "connected-react-router";
@@ -10,12 +10,14 @@ import { Route, Switch } from "react-router-dom";
 
 import { history, reduxStore } from "./store";
 
+import ViewList from "./ViewList";
+
 
 ReactDOM.render(
   <Provider store = {reduxStore}>
     <ConnectedRouter history={history}>
       <Switch>
-        <Route path="/viewlist/:listID/:todoID?" component={App} />
+        <Route path="/viewlist/:listID/:todoID?" component={ViewList} />
       </Switch>
     </ConnectedRouter>
   </Provider>, 
