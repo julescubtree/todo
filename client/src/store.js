@@ -10,6 +10,8 @@ import { firestoreReducer, reduxFirestore } from "redux-firestore";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 
+import reduxReducer from "./reducers.js";
+
 
 firebase.initializeApp({
   apiKey: "AIzaSyCxfB9_DALmIlpE-IQYyCYsqn5kncs9CTQ",
@@ -30,12 +32,20 @@ const createStoreWithFirebase = compose(
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
+  reduxState: reduxReducer,
 });
+
+const initialState = {
+  reduxState: {
+    listID: null,
+    todoID: null,
+  },
+}
 
 export const history = createBrowserHistory();
 
 export const reduxStore = createStoreWithFirebase(
   connectRouter(history)(rootReducer), 
-  {},
+  initialState,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
