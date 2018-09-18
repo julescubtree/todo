@@ -10,7 +10,7 @@ import { Route, Switch } from "react-router-dom";
 
 import { history, reduxStore } from "./store";
 
-import ViewList from "./ViewList";
+import ViewList from "./components/ViewList";
 
 
 ReactDOM.render(
