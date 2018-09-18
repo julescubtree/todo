@@ -6,7 +6,7 @@ import { Checkbox, Menu } from "antd";
 class TodoMenu extends React.Component {
   constructor(props){
     super(props);
-    this.renderTodoMenuItem = this.renderTodoMenuItem.bind(this);
+    //this.renderTodoMenuItem = this.renderTodoMenuItem.bind(this);
     this.selectTodo = this.selectTodo.bind(this);
   }
 
@@ -28,7 +28,7 @@ class TodoMenu extends React.Component {
 
   render(){
     return (
-      <Menu defaultSelectedKeys={[this.props.orderedTodos[0].id]} onClick={this.selectTodo}>
+      <Menu defaultSelectedKeys={[this.props.selectedTodoID]} onClick={this.selectTodo}>
         {this.props.orderedTodos.map(this.renderTodoMenuItem)}
       </Menu>
     );
@@ -46,6 +46,7 @@ TodoMenu.propTypes = {
       title: PropTypes.string,
     }).isRequired,
   ).isRequired,
+  selectedTodoID: PropTypes.string,
   selectTodo: PropTypes.func.isRequired,
   updateTodoCompletion: PropTypes.func.isRequired,
 }

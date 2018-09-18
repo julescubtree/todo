@@ -15,7 +15,7 @@ class App extends React.Component {
     this.selectTodo = this.selectTodo.bind(this);
     this.updateTodoCompletion = this.updateTodoCompletion.bind(this);
     this.state = {
-      currentTodoID: null,
+      currentTodoID: this.props.match.params.todoID ||  null,
     }
   }
 
@@ -32,7 +32,9 @@ class App extends React.Component {
   }  
 
   render() {
-    const displayedTodo = this.props.orderedTodos.find( (todo) => (todo.id===this.state.currentTodoID) ) || this.props.orderedTodos[0];
+    const displayedTodo = this.props.orderedTodos.find( (todo) => (todo.id===this.state.currentTodoID) )
+      || this.props.orderedTodos[0];
+    console.log(this.props.orderedTodos[0])
 
     return (
       <div>
@@ -44,6 +46,7 @@ class App extends React.Component {
                 <Sider theme="light">
                   <TodoMenu
                     orderedTodos={this.props.orderedTodos}
+                    selectedTodoID={displayedTodo.id}
                     selectTodo={this.selectTodo}
                     updateTodoCompletion={this.updateTodoCompletion}
                   />

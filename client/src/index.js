@@ -15,7 +15,7 @@ ReactDOM.render(
   <Provider store = {reduxStore}>
     <ConnectedRouter history={history}>
       <Switch>
-        <Route path="/view/:listID" component={App} />
+        <Route path="/viewlist/:listID/:todoID?" component={App} />
       </Switch>
     </ConnectedRouter>
   </Provider>, 
