@@ -34,7 +34,6 @@ class App extends React.Component {
   render() {
     const displayedTodo = this.props.orderedTodos.find( (todo) => (todo.id===this.state.currentTodoID) )
       || this.props.orderedTodos[0];
-    console.log(this.props.orderedTodos[0])
 
     return (
       <div>

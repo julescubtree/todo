@@ -6,11 +6,11 @@ import { Checkbox, Menu } from "antd";
 class TodoMenu extends React.Component {
   constructor(props){
     super(props);
-    //this.renderTodoMenuItem = this.renderTodoMenuItem.bind(this);
+    this.renderTodoMenuItem = this.renderTodoMenuItem.bind(this);
     this.selectTodo = this.selectTodo.bind(this);
   }
 
-  selectTodo({item, key}){
+  selectTodo({/*item,*/ key /*, keyPath*/}){
     this.props.selectTodo(key);
   }
 
