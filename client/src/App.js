@@ -12,9 +12,19 @@ const { Content, Header, Sider } = Layout;
 class App extends React.Component {
   constructor(props){
     super(props);
+    this.selectTodo = this.selectTodo.bind(this);
     this.updateTodoCompletion = this.updateTodoCompletion.bind(this);
+    this.state = {
+      currentTodoID: null,
+    }
   }
 
+  selectTodo(todoID){
+    this.setState({
+      currentTodoID: todoID,
+    });
+  }
+  
   updateTodoCompletion(todoID, completed){
     const { listID } = this.props.match.params;
     const todo = this.props.firestore.doc(`lists/${listID}/todos/${todoID}`);
@@ -22,6 +32,8 @@ class App extends React.Component {
   }  
 
   render() {
+    const displayedTodo = this.props.orderedTodos.find( (todo) => (todo.id===this.state.currentTodoID) ) || this.props.orderedTodos[0];
+
     return (
       <div>
         {
@@ -32,6 +44,7 @@ class App extends React.Component {
                 <Sider theme="light">
                   <TodoMenu
                     orderedTodos={this.props.orderedTodos}
+                    selectTodo={this.selectTodo}
                     updateTodoCompletion={this.updateTodoCompletion}
                   />
                 </Sider>
@@ -39,7 +52,7 @@ class App extends React.Component {
                   <Card>
                     <Icon type="picture" theme="twoTone" style={{ fontSize: "196px" }}/>
                     <br />
-                    {this.props.todos[0].desc}
+                    {displayedTodo.desc}
                   </Card> 
                 </Content>
               </Layout>

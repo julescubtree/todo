@@ -7,6 +7,11 @@ class TodoMenu extends React.Component {
   constructor(props){
     super(props);
     this.renderTodoMenuItem = this.renderTodoMenuItem.bind(this);
+    this.selectTodo = this.selectTodo.bind(this);
+  }
+
+  selectTodo({item, key}){
+    this.props.selectTodo(key);
   }
 
   renderTodoMenuItem(todo){
@@ -15,7 +20,7 @@ class TodoMenu extends React.Component {
         {todo.title}
         <Checkbox 
           checked={todo.completed} 
-          onChange={ (e) => {this.props.updateTodoCompletion(todo.id, e.target.checked)} }
+          onChange={ (e) => {this.props.updateTodoCompletion(todo.id, e.target.checked);} }
         />
       </Menu.Item>
     );
@@ -23,7 +28,7 @@ class TodoMenu extends React.Component {
 
   render(){
     return (
-      <Menu>
+      <Menu defaultSelectedKeys={[this.props.orderedTodos[0].id]} onClick={this.selectTodo}>
         {this.props.orderedTodos.map(this.renderTodoMenuItem)}
       </Menu>
     );
@@ -41,6 +46,7 @@ TodoMenu.propTypes = {
       title: PropTypes.string,
     }).isRequired,
   ).isRequired,
+  selectTodo: PropTypes.func.isRequired,
   updateTodoCompletion: PropTypes.func.isRequired,
 }
 
